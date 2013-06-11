@@ -1,0 +1,380 @@
+﻿<Window x:Class="Neudesic.AzureStorageExplorer.Dialogs.BlobDetailDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sharp="clr-namespace:SharpFellows.Toolkit.Controls"
+        xmlns:converters="clr-namespace:Neudesic.AzureStorageExplorer.Converters"
+        Title="{Binding Title}"
+        Width="480" Height="380"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
+        Icon="/Images/App.ico"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        >
+    
+    <Window.Resources>
+
+        <converters:BinaryImageConverter x:Key="ImageConverter" />
+
+       <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Background" Value="#FFCDE7F4" />
+            <Setter Property="Foreground" Value="#FF07034B"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFA1CCE0" Offset="0"/>
+                        <GradientStop Color="#FFABD5EA" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <TabControl Name="TabControl" SelectionChanged="TabControl_SelectionChanged">
+
+            <!-- Properties -->
+        
+            <TabItem Header="Properties">
+                
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" 
+                            Margin="0,0,0,4" Padding="8,4,4,4" 
+                            Background="PowderBlue">
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock x:Name="ViewInBrowser" 
+                                       Text="View in Browser" 
+                                       FontFamily="Calibri" FontWeight="8"
+                                       TextDecorations="Underline" Foreground="RoyalBlue"
+                                       MouseLeftButtonDown="ViewInBrowser_MouseLeftButtonDown" />
+                        </StackPanel>
+                    </Border>
+
+                    <ScrollViewer Name="PropertyPane" 
+                              Grid.Row="1"
+                              Margin="0,0,0,8"
+                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                              HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0">
+                    <Border BorderBrush="Black" BorderThickness="0">
+                        <StackPanel>
+                            <DataGrid Name="PropertyGrid"
+                                AutoGenerateColumns="False"
+                                Background="Transparent"
+                                RowBackground="White"
+                                Foreground="Black"
+                                FontFamily="Calibri" FontWeight="10" GridLinesVisibility="All"
+                                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                HorizontalGridLinesBrush="#22000000" VerticalGridLinesBrush="#22000000"
+                                HeadersVisibility="Column" 
+                                ItemsSource="{Binding Properties,Mode=TwoWay}"
+                                >
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="Property" MinWidth="100" Width="Auto" Binding="{Binding PropertyName,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" />
+                                        <DataGridTextColumn Header="Value" MinWidth="100" Width="Auto" Binding="{Binding PropertyValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Border>
+                </ScrollViewer>
+
+                    <StackPanel Grid.Row="2" 
+                                Margin="0,0,0,0"
+                                Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button Name="SaveProperties"
+                                Content="Save Properties"
+                                IsDefault="True"
+                                Margin="0,0,4,0"
+                                Height="22"
+                                FontFamily="Calibri" FontSize="12"
+                                Template="{DynamicResource GlassButton}" Foreground="Black"
+                                Click="SaveProperties_Click"/>
+                        <Button Name="CloseProperties"
+                                Content="Close"
+                                IsCancel="True"
+                                Margin="0,0,8,0"
+                                Height="22"
+                                FontFamily="Calibri" FontSize="12"
+                                Template="{DynamicResource GlassButton}" Foreground="Black"
+                                Click="Close_Click"/>
+                    </StackPanel>
+                    
+                </Grid>
+            </TabItem>
+
+            <!-- Metadata -->
+
+            <TabItem Header="Metadata">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ScrollViewer Name="MetadataPane" 
+                              Grid.Row="1"
+                              Margin="0,0,0,8"
+                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                              HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0">
+                        <Border BorderBrush="Black" BorderThickness="0">
+                            <StackPanel>
+                                <DataGrid Name="MetadataGrid"
+                                          AutoGenerateColumns="False"
+                                          Background="Transparent"
+                                          RowBackground="White"
+                                          Foreground="Black"
+                                          FontFamily="Calibri" FontWeight="10" GridLinesVisibility="All"
+                                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                          HorizontalGridLinesBrush="#22000000" VerticalGridLinesBrush="#22000000"
+                                          HeadersVisibility="Column" 
+                                          ItemsSource="{Binding Metadata,Mode=TwoWay}"
+                                          >
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" MinWidth="100" Width="Auto" Binding="{Binding PropertyName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                        <DataGridTextColumn Header="Value" MinWidth="100" Width="Auto" Binding="{Binding PropertyValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </ScrollViewer>
+
+                    <StackPanel Grid.Row="2" 
+                                Margin="0,0,0,0"
+                                Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button Name="SaveMetadata"
+                                Content="Save Metadata"
+                                IsDefault="True"
+                                Margin="0,0,4,0"
+                                Height="22"
+                                FontFamily="Calibri" FontSize="12"
+                                Template="{DynamicResource GlassButton}" Foreground="Black"
+                                Click="SaveMetadata_Click"/>
+                        <Button Name="CloseMetadata"
+                                Content="Close"
+                                IsCancel="True"
+                                Margin="0,0,8,0"
+                                Height="22"
+                                FontFamily="Calibri" FontSize="12"
+                                Template="{DynamicResource GlassButton}" Foreground="Black"
+                                Click="Close_Click"/>
+                    </StackPanel>
+
+                </Grid>
+            </TabItem>
+
+
+            <!-- Image Preview -->
+
+            <TabItem Header="Image" >
+                <ScrollViewer Name="ImageTabContent" Grid.Row="1" 
+                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                              HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0">
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid>
+                            <TextBlock Name="PreviewMessage" Text=""
+                                       FontFamily="Calibri" FontSize="12"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Button Name="CancelPreview" 
+                                Content="Cancel"
+                                Margin="0,48,0,0" 
+                                Height="22"
+                                FontFamily="Calibri" FontSize="12"
+                                Template="{DynamicResource GlassButton}" Foreground="Black"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Visibility="Collapsed"
+                                Click="CancelPreview_Click" />
+
+                            <Border Padding="4,2,4,2" Background="PowderBlue" VerticalAlignment="Top">
+                                <StackPanel Orientation="Horizontal" >
+                                    <TextBlock x:Name="UploadImage" 
+                                           Text="Upload Image File" 
+                                           Margin="0,0,0,0" 
+                                           FontFamily="Calibri" FontWeight="8"
+                                           TextDecorations="Underline" Foreground="RoyalBlue"
+                                           MouseLeftButtonDown="UploadImage_MouseLeftButtonDown" />
+                                </StackPanel>
+                            </Border>
+
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <sharp:ContentSpinner x:Name="ImageSpinner" 
+                                              Margin="10" Height="32" Width="32"
+                                              IsEnabled="True"
+                                              Visibility="{Binding ImageSpinnerVisibility}"
+                                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              >
+                                    <Image Source="/Images/WinAzSquare.png" Width="32" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </sharp:ContentSpinner>
+                                <Viewbox VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                        <Image Name="PreviewImage"
+                                               Source="{Binding Path=PreviewImage, Converter={StaticResource ImageConverter}}"
+                                               VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                               ImageFailed="PreviewImage_ImageFailed" 
+                                               Stretch="None"
+                                               SizeChanged="PreviewImage_SizeChanged"/>
+                                </Viewbox>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Video Preview -->
+
+            <TabItem Header="Video" Loaded="VideoTab_Loaded" >
+                <ScrollViewer Name="VideoTabContent" Grid.Row="1" 
+                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                              HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0">
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid>
+                            <TextBlock Name="PreviewVideoMessage" Text=""
+                                       FontFamily="Calibri" FontSize="12"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Button Name="CancelVideoPreview" 
+                                Content="Cancel"
+                                Margin="0,48,0,0" 
+                                Height="22"
+                                FontFamily="Calibri" FontSize="12"
+                                Template="{DynamicResource GlassButton}" Foreground="Black"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Visibility="Collapsed"
+                                Click="CancelPreview_Click" />
+
+                            <Border Padding="4,2,4,2" Background="PowderBlue" VerticalAlignment="Top">
+                                <StackPanel Orientation="Horizontal" >
+                                    <TextBlock x:Name="UploadVideo" 
+                                           Text="Upload Video File" 
+                                           Margin="0,0,0,0" 
+                                           FontFamily="Calibri" FontWeight="8"
+                                           TextDecorations="Underline" Foreground="RoyalBlue"
+                                           MouseLeftButtonDown="UploadVideo_MouseLeftButtonDown" />
+                                </StackPanel>
+                            </Border>
+
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <sharp:ContentSpinner x:Name="VideoSpinner" 
+                                              Margin="10" Height="32" Width="32"
+                                              IsEnabled="True"
+                                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              >
+                                    <Image Source="/Images/WinAzSquare.png" Width="32" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </sharp:ContentSpinner>
+
+                                <Viewbox VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                    <MediaElement Name="PreviewVideo"
+                                           Source="{Binding PreviewVideo}"
+                                           VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                           MediaFailed="PreviewVideo_MediaFailed" 
+                                           MediaOpened="PreviewVideo_MediaOpened"
+                                           Stretch="None"
+                                           SizeChanged="PreviewVideo_SizeChanged"/>
+                                </Viewbox>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </ScrollViewer>
+            </TabItem>
+                
+            <!-- Text Tab -->
+
+            <TabItem Header="Text" >
+
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" 
+                            Margin="0,0,0,4" Padding="8,4,4,4"
+                            Background="PowderBlue">
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock x:Name="TextUpload"  
+                                           Text="Upload Text File" 
+                                           Margin="0,0,0,0" 
+                                           FontFamily="Calibri" FontWeight="8"
+                                           TextDecorations="Underline" Foreground="RoyalBlue"
+                                           MouseLeftButtonDown="UploadTextFile_MouseLeftButtonDown" />
+                        </StackPanel>
+                    </Border>
+
+                    <ScrollViewer x:Name="TextTabContent" Grid.Row="1"
+                                  Margin="0,0,0,8"
+                                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0">
+                        <Border>
+                            <Grid>
+                                <TextBlock Name="TextPreviewMessage" Text=""
+                                       FontFamily="Calibri" FontSize="12"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button Name="CancelTextPreview" 
+                                    Content="Cancel"
+                                    Margin="0,48,0,0" 
+                                    Height="22"
+                                    FontFamily="Calibri" FontSize="12"
+                                    Template="{DynamicResource GlassButton}" Foreground="Black"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Visibility="Collapsed"
+                                    Click="CancelTextPreview_Click" />
+
+                                <StackPanel>
+
+                                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                        <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding PreviewTextVisibility}">
+                                            <TextBox Name="TextEdit" 
+                                                 Text="{Binding PreviewText,Mode=OneWay}"
+                                                 AcceptsReturn="True" AcceptsTab="True" 
+                                                 TextWrapping="Wrap" 
+                                                 VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                                <sharp:ContentSpinner x:Name="TextSpinner" 
+                                              Margin="10" Height="32" Width="32"
+                                              IsEnabled="True"
+                                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Visibility="{Binding TextSpinnerVisibility}"
+                                              >
+                                    <Image Source="/Images/WinAzSquare.png" Width="32" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </sharp:ContentSpinner>
+                            </Grid>
+                        </Border>
+                    </ScrollViewer>
+
+                    <StackPanel Grid.Row="2" 
+                                Margin="0,0,0,0"
+                                Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button Name="SaveTextContent"
+                                Content="Save Content"
+                                IsDefault="True"
+                                Margin="0,0,4,0"
+                                Height="22"
+                                FontFamily="Calibri" FontSize="12"
+                                Template="{DynamicResource GlassButton}" Foreground="Black"
+                                Click="SaveTextContent_Click"/>
+                        <Button Name="CloseText"
+                                Content="Close"
+                                IsCancel="True"
+                                Margin="0,0,8,0"
+                                Height="22"
+                                FontFamily="Calibri" FontSize="12"
+                                Template="{DynamicResource GlassButton}" Foreground="Black"
+                                Click="Close_Click"/>
+                    </StackPanel>
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

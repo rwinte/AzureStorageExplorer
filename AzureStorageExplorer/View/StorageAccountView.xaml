@@ -1,0 +1,534 @@
+﻿<UserControl 
+  x:Class="Neudesic.AzureStorageExplorer.View.StorageAccountView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+  xmlns:controls="clr-namespace:Neudesic.AzureStorageExplorer.Controls"
+  xmlns:sharp="clr-namespace:SharpFellows.Toolkit.Controls"
+  >
+  <UserControl.Resources>
+
+        <Style x:Key="MainBorderStyle" TargetType="{x:Type Border}">
+            <Setter Property="Background" Value="WhiteSmoke" />
+            <Setter Property="BorderBrush" Value="LightGray" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+        </Style>
+
+        <Style x:Key="GridViewColumnHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Background" Value="#FFCDE7F4" />
+            <Setter Property="Foreground" Value="#FF07034B"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFA1CCE0" Offset="0"/>
+                        <GradientStop Color="#FFABD5EA" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+  </UserControl.Resources>
+
+    <DockPanel>
+        <Grid DockPanel.Dock="Bottom" Margin="0,6,4,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+            <Border x:Name="StatusMessageBorder" 
+                    Grid.Column="0" Grid.ColumnSpan="3" 
+                    CornerRadius="6"
+                    BorderThickness="0"
+                    HorizontalAlignment="Center"
+                    Background="{Binding StatusMessageBackground}"
+                    Padding="8,2,8,2"
+                    >
+                <TextBlock Text="{Binding StatusMessageText}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           FontFamily="Calibri" FontSize="12" />
+            </Border>
+
+            <TextBlock Grid.Column="0" 
+                       HorizontalAlignment="Left"
+                       Text="{Binding FolderSummary}"
+                       FontFamily="Calibri" FontSize="12" />
+            <TextBlock Grid.Column="2" 
+                       HorizontalAlignment="Right"
+                       Text="{Binding ItemSummary}"
+                       FontFamily="Calibri" FontSize="12" />
+            
+        </Grid>
+
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,2,4" >
+
+                <!-- Container Toolbar -->
+
+                <Border Grid.Column="0" 
+                        Name="ContainerToolbar"
+                        Style="{StaticResource MainBorderStyle}" 
+                        Background="#33FFFFFF" 
+                        BorderThickness="1" BorderBrush="DarkGray"
+                        Padding="4,0,2,4" Margin="0,0,4,0"
+                        Visibility="{Binding Path=BlobsVisible}"
+                        >
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,0" >
+                        <TextBlock Text="Container" 
+                                   HorizontalAlignment="Center"
+                                   FontFamily="Segoe UI" FontSize="10" 
+                                   Margin="0,2,0,2" />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0" >
+                            <controls:ToolbarButton Text="New" Image="/Images/NewFolder.png" ButtonBase.Click="NewContainerButton_Click" />
+                            <controls:ToolbarButton Text="Copy" Image="/Images/NewFolder.png" ButtonBase.Click="CopyContainerButton_Click" />
+                            <controls:ToolbarButton Text="Rename" Image="/Images/NewFolder.png" ButtonBase.Click="RenameContainerButton_Click" />
+                            <controls:ToolbarButton Text="Delete" Image="/Images/DeleteFolder.png" ButtonBase.Click="DeleteContainerButton_Click" />
+                        </StackPanel>
+                    </StackPanel>
+
+                </Border>
+
+                <!-- Blob Toolbar -->
+
+                <Border Grid.Column="0" 
+                        Name="BlobToolbar"
+                        Style="{StaticResource MainBorderStyle}" 
+                        Background="#33FFFFFF"  
+                        BorderThickness="1" BorderBrush="DarkGray"
+                        Padding="4,0,2,4" Margin="0,0,4,0"
+                        Visibility="{Binding Path=BlobsVisible}"
+                        >
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,0" >
+                        <TextBlock Text="Blob" 
+                                   HorizontalAlignment="Center"
+                                   FontFamily="Segoe UI" FontSize="10" 
+                                   Margin="0,2,0,2" />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0" >
+                            <controls:ToolbarButton Text="View" Image="/Images/SearchMagnifier.png" ButtonBase.Click="ViewBlobButton_Click" />
+                            <controls:ToolbarButton Text="New" Image="/Images/NewItem.png" ButtonBase.Click="NewBlobButton_Click" />
+                            <controls:ToolbarButton Text="Copy" Image="/Images/NewItem.png" ButtonBase.Click="CopyBlobButton_Click" />
+                            <controls:ToolbarButton Text="Rename" Image="/Images/NewItem.png" ButtonBase.Click="RenameBlobButton_Click" />
+                            <controls:ToolbarButton Text="Delete" Image="/Images/DeleteItem.png" ButtonBase.Click="DeleteBlobButton_Click" />
+                            <controls:ToolbarButton Text="Upload" Image="/Images/UploadItem.png" ButtonBase.Click="UploadBlobButton_Click" />
+                            <controls:ToolbarButton Text="Download" Image="/Images/DownloadItem.png" ButtonBase.Click="DownloadBlobButton_Click" />
+                            <controls:ToolbarButton Text="Security" Image="/Images/LockedFolder24.png" ButtonBase.Click="SecurityBlobButton_Click" />
+                        </StackPanel>
+                    </StackPanel>
+
+                </Border>
+
+                <!-- Queue Toolbar -->
+
+                <Border Grid.Column="0" 
+                        Name="QueueToolbar"
+                        Style="{StaticResource MainBorderStyle}" 
+                        Background="#33FFFFFF"  
+                        BorderThickness="1" BorderBrush="DarkGray"
+                        Padding="4,0,2,4" Margin="0,0,4,0"
+                        Visibility="{Binding Path=QueuesVisible}"
+                        >
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,0" >
+                        <TextBlock Text="Queue" 
+                                   HorizontalAlignment="Center"
+                                   FontFamily="Segoe UI" FontSize="10" 
+                                   Margin="0,2,0,2" />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0" >
+                            <controls:ToolbarButton Text="New" Image="/Images/NewQueue.png" ButtonBase.Click="NewQueueButton_Click" />
+                            <controls:ToolbarButton Text="Copy" Image="/Images/NewQueue.png" ButtonBase.Click="CopyQueueButton_Click" />
+                            <controls:ToolbarButton Text="Rename" Image="/Images/NewQueue.png" ButtonBase.Click="RenameQueueButton_Click" />
+                            <controls:ToolbarButton Text="Delete" Image="/Images/DeleteQueue.png" ButtonBase.Click="DeleteQueueButton_Click" />
+                        </StackPanel>
+                    </StackPanel>
+
+                </Border>
+
+                <!-- Message Toolbar -->
+
+                <Border Grid.Column="0" 
+                        Name="MessageToolbar"
+                        Style="{StaticResource MainBorderStyle}" 
+                        Background="#33FFFFFF"  
+                        BorderThickness="1" BorderBrush="DarkGray"
+                        Padding="4,0,2,4" Margin="0,0,0,0"
+                        Visibility="{Binding Path=QueuesVisible}"
+                        >
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,0" >
+                        <TextBlock Text="Message" 
+                                   HorizontalAlignment="Center"
+                                   FontFamily="Segoe UI" FontSize="10" 
+                                   Margin="0,2,0,2" />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0" >
+                            <controls:ToolbarButton Text="View" Image="/Images/SearchMagnifier.png" ButtonBase.Click="ViewMessageButton_Click" />
+                            <controls:ToolbarButton Text="New" Image="/Images/NewItem.png" ButtonBase.Click="NewMessageButton_Click" />
+                            <controls:ToolbarButton Text="Pop" Image="/Images/DeleteItem.png" ButtonBase.Click="DeleteMessageButton_Click" />
+                            <controls:ToolbarButton Text="Pop All" Image="/Images/DeleteItem.png" ButtonBase.Click="DeleteAllMessagesButton_Click" />
+                            <controls:ToolbarButton Text="Upload" Image="/Images/UploadItem.png" ButtonBase.Click="UploadMessageButton_Click" />
+                            <controls:ToolbarButton Text="Download" Image="/Images/DownloadItem.png" ButtonBase.Click="DownloadMessageButton_Click" />
+                        </StackPanel>
+                    </StackPanel>
+
+                </Border>
+
+                <!-- Table Toolbar -->
+
+                <Border Grid.Column="0" 
+                        Name="TableToolbar"
+                        Style="{StaticResource MainBorderStyle}" 
+                        Background="#33FFFFFF"  
+                        BorderThickness="1" BorderBrush="DarkGray"
+                        Padding="4,0,2,4" Margin="0,0,4,0"
+                        Visibility="{Binding Path=TablesVisible}"
+                        >
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,0" >
+                        <TextBlock Text="Table" 
+                                   HorizontalAlignment="Center"
+                                   FontFamily="Segoe UI" FontSize="10" 
+                                   Margin="0,2,0,2" />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0" >
+                            <controls:ToolbarButton Text="New" Image="/Images/NewTable2.png" ButtonBase.Click="NewTableButton_Click"  />
+                            <controls:ToolbarButton Text="Copy" Image="/Images/NewTable2.png" ButtonBase.Click="CopyTableButton_Click" />
+                            <controls:ToolbarButton Text="Rename" Image="/Images/NewTable2.png" ButtonBase.Click="RenameTableButton_Click" />
+                            <controls:ToolbarButton Text="Delete" Image="/Images/DeleteTable.png" ButtonBase.Click="DeleteTableButton_Click" />
+                        </StackPanel>
+                    </StackPanel>
+
+                </Border>
+
+                <!-- Entity Toolbar -->
+
+                <Border Grid.Column="0" 
+                        Name="EntityToolbar"
+                        Style="{StaticResource MainBorderStyle}" 
+                        Background="#33FFFFFF"  
+                        BorderThickness="1" BorderBrush="DarkGray"
+                        Padding="4,0,2,4" Margin="0,0,4,0"
+                        Visibility="{Binding Path=TablesVisible}"
+                        >
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,0" >
+                        <TextBlock Text="Entity" 
+                                   HorizontalAlignment="Center"
+                                   FontFamily="Segoe UI" FontSize="10" 
+                                   Margin="0,2,0,2" />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0" >
+                            <controls:ToolbarButton Text="Edit" Image="/Images/SearchMagnifier.png" ButtonBase.Click="ViewEntityButton_Click" />
+                            <controls:ToolbarButton Text="New" Image="/Images/NewItem.png" ButtonBase.Click="NewEntityButton_Click" />
+                            <controls:ToolbarButton Text="Copy" Image="/Images/NewItem.png" ButtonBase.Click="CopyEntityButton_Click" />
+                            <controls:ToolbarButton Text="Delete" Image="/Images/DeleteItem.png" ButtonBase.Click="DeleteEntityButton_Click" />
+                            <controls:ToolbarButton Text="Upload" Image="/Images/UploadItem.png" ButtonBase.Click="UploadEntityButton_Click" />
+                            <controls:ToolbarButton Text="Download" Image="/Images/DownloadItem.png" ButtonBase.Click="DownloadEntityButton_Click" />
+                        </StackPanel>
+                    </StackPanel>
+
+                </Border>
+
+            </StackPanel>
+
+                <!-- View Toolbar -->
+
+                <Border Grid.Column="1" 
+                        Name="viewToolbar"
+                        Style="{StaticResource MainBorderStyle}" 
+                        Background="#33FFFFFF" 
+                        BorderThickness="1" BorderBrush="DarkGray"
+                        Padding="4,0,2,4" Margin="0,0,0,4"
+                        >
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,0" >
+                        <TextBlock Text="Storage Type" 
+                                   HorizontalAlignment="Center"
+                                   FontFamily="Segoe UI" FontSize="10" 
+                                   Margin="0,2,0,2" />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0" >
+                            <controls:ToolbarButton Text="Blobs" Image="/Images/Folder24.png" ButtonBase.Click="ViewBlobsButton_Click" />
+                            <controls:ToolbarButton Text="Queues" Image="/Images/Queue.png" ButtonBase.Click="ViewQueuesButton_Click" />
+                            <controls:ToolbarButton Text="Tables" Image="/Images/Table.png" ButtonBase.Click="ViewTablesButton_Click" />
+                            <controls:ToolbarButton Text="Refresh" Image="/Images/Refresh.png" ButtonBase.Click="RefreshButton_Click" />
+                        </StackPanel>
+                    </StackPanel>
+
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="196" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" 
+                        Name="ListPanel"
+                        Style="{StaticResource MainBorderStyle}" 
+                        Background="Transparent" 
+                        BorderThickness="1" BorderBrush="DarkGray"
+                        Margin="0,0,4,0" Padding="8"
+                        >
+                    <ScrollViewer Grid.Column="0" 
+                                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                        <Border Background="Transparent" 
+                                VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <Grid>
+                                <TreeView Name="FolderTree" 
+                                      Margin="-24,0,0,0"
+                                        VerticalAlignment="Stretch" 
+                                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                        SelectedItemChanged="FolderTreeView_SelectedItemChanged"  
+                                        Background="Transparent" BorderThickness="0"
+                                        MinWidth="100"
+                                        FontFamily="Calibri" FontWeight="10"
+                                        ItemsSource="{Binding Folders}"
+
+                                />
+                                    <sharp:ContentSpinner x:Name="FolderTreeSpinner" 
+                                                          Margin="10"
+                                                          IsEnabled="True"
+                                                          Visibility="{Binding ListSpinnerVisible}"
+                                                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                          >
+                                        <Image Source="/Images/WinAzSquare.png" Width="32" 
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </sharp:ContentSpinner>
+                            </Grid>
+                        </Border>
+                    </ScrollViewer>
+
+                </Border>
+
+                <GridSplitter Grid.Column="0" Width="1" />
+
+                <Border Grid.Column="1" 
+                        Name="DetailPanel"
+                        Style="{StaticResource MainBorderStyle}" 
+                        Background="Transparent" 
+                        BorderThickness="1" BorderBrush="DarkGray"
+                        Margin="2,0,0,0" Padding="8"
+                        >
+                    <Grid>
+                        <ScrollViewer Grid.Column="1" 
+                                      x:Name="BlobListViewer" 
+                                      Visibility="{Binding BlobListVisibility}"
+                                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                                      HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <Border Background="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <ListView Name="BlobList" 
+                                          Visibility="{Binding Path=BlobsVisible}"
+                                          Background="Transparent" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                          VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                                          SelectionChanged="BlobList_SelectionChanged"
+                                          MinWidth="100" Foreground="Black"
+                                          FontFamily="Calibri" FontWeight="10"
+                                          ItemsSource="{Binding BlobItems}"
+                                          MouseDoubleClick="BlobList_MouseDoubleClick"
+                                          >
+                                    <ListView.View>
+                                        <GridView AllowsColumnReorder="true" 
+                                      ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"
+                                      ColumnHeaderToolTip="File List"
+                                      >
+                                            <GridViewColumn DisplayMemberBinding=
+                                                "{Binding Path=Name}" 
+                                                Header="Name" Width="Auto" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=LastModifiedText}" 
+                                                Header="Last Modified" Width="Auto"  />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=LengthText}" 
+                                                Header="Length" Width="Auto"  />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=ContentType}" 
+                                                Header="Content Type" Width="Auto"  />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=ContentEncoding}" 
+                                                Header="Content Encoding" Width="Auto"  />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=ContentLanguage}" 
+                                                Header="Content Language" Width="Auto"  />
+                                        </GridView>
+
+                                    </ListView.View>
+
+                                </ListView>
+                            </Border>
+                        </ScrollViewer>
+                        <ScrollViewer Grid.Column="1" 
+                                      x:Name="MessageListViewer" 
+                                      Visibility="{Binding MessageListVisibility}"
+                                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                                      HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <Border Background="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <ListView Name="MessageList" 
+                                          Visibility="{Binding Path=QueuesVisible}"
+                                          Background="Transparent" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                          VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                                          SelectionChanged="MessageList_SelectionChanged"
+                                          MinWidth="100" Foreground="Black"
+                                          FontFamily="Calibri" FontWeight="10"
+                                          ItemsSource="{Binding Messages}"
+                                          MouseDoubleClick="MessageList_MouseDoubleClick"
+                                          >
+                                    <ListView.View>
+                                        <GridView AllowsColumnReorder="true" 
+                                      ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"
+                                      ColumnHeaderToolTip="File List"
+                                      >
+                                            <GridViewColumn DisplayMemberBinding=
+                                                "{Binding Path=Id}" 
+                                                Header="Id" Width="Auto" />
+                                            <GridViewColumn DisplayMemberBinding=
+                                                "{Binding Path=InsertionTime}" 
+                                                Header="Insertion Time" Width="Auto" />
+                                            <GridViewColumn DisplayMemberBinding=
+                                                "{Binding Path=DequeueCount}" 
+                                                Header="Dequeue Count" Width="Auto" />
+                                            <GridViewColumn DisplayMemberBinding=
+                                                "{Binding Path=ExpirationTime}" 
+                                                Header="Expiration Time" Width="Auto" />
+                                            <GridViewColumn DisplayMemberBinding=
+                                                "{Binding Path=NextVisibleTime}" 
+                                                Header="Next Visible Time" Width="Auto" />
+                                            <GridViewColumn DisplayMemberBinding=
+                                                "{Binding Path=DequeueCount}" 
+                                                Header="Dequeue Count" Width="Auto" />
+                                            <GridViewColumn DisplayMemberBinding=
+                                                "{Binding Path=PopReceipt}" 
+                                                Header="Pop Receipt" Width="Auto" />
+                                        </GridView>
+
+                                    </ListView.View>
+
+                                </ListView>
+                            </Border>
+                        </ScrollViewer>
+
+                        <Border VerticalAlignment="Top"
+                                Grid.Column="1"
+                                HorizontalAlignment="Stretch" 
+                                Background="Transparent" 
+                                Visibility="{Binding EntityListVisibility}"
+                                >
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" 
+                                                        HorizontalAlignment="Left" 
+                                                        Orientation="Horizontal" >
+                                    <TextBlock Name="QueryLabel" 
+                                                           VerticalAlignment="Center"
+                                                           FontFamily="Calibri" FontSize="12"
+                                                           Text="Query:"
+                                                           Margin="0,0,8,0" />
+                                </StackPanel>
+
+                                <Grid Grid.Column="1"
+                                        Background="White"
+                                        Margin="0,0,16,0"
+                                        HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                    <TextBlock Name="QueryTextGhost"
+                                               Text="PartitionKey = '1' and RowKey='2'"
+                                               HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                               Foreground="LightGray"
+                                               FontFamily="Calibri" FontSize="12"
+                                               Padding="6,0,0,0"
+                                               />
+                                    <TextBox Name="QueryText"
+                                             Background="Transparent"
+                                             HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                             FontFamily="Calibri" FontSize="12"
+                                             TextChanged="QueryText_TextChanged"
+                                             />
+                                </Grid>
+
+                                <StackPanel Grid.Column="2" 
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Right">
+                                    <TextBlock Name="MaxRowsLabel" 
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="Calibri" FontSize="12"
+                                                       Text="Max rows to return:"
+                                                       Margin="0,0,8,0" />
+                                    <TextBox Name="MaxRowsText"
+                                                     VerticalAlignment="Center"
+                                                     FontFamily="Calibri" FontSize="12"
+                                                     Width="50"
+                                                     Text="2000"
+                                                     Margin="0,0,4,0"
+                                                     />
+                                    <Button Name="QueryEntities" IsDefault="True"
+                                            VerticalAlignment="Center"
+                                            Padding="12,2,12,2" Margin="0,0,8,0"
+                                            Content="Query"
+                                            Height="22"
+                                            FontFamily="Calibri" FontSize="12"
+                                            Template="{DynamicResource GlassButton}" Foreground="Black"
+                                            Click="QueryEntities_Click"
+                                            />
+                                    <Button Name="DeleteEntities" 
+                                            VerticalAlignment="Center"
+                                            Padding="12,2,12,2" Margin="0,0,0,0"
+                                            Content="Delete"
+                                            Height="22"
+                                            FontFamily="Calibri" FontSize="12"
+                                            Template="{DynamicResource GlassButton}" Foreground="Black"
+                                            Click="DeleteEntities_Click"
+                                            />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <ScrollViewer Grid.Column="1" 
+                                      Margin="0,28,0,0"
+                                      x:Name="EntityListViewer" 
+                                      Visibility="{Binding EntityListVisibility}"
+                                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                                      HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <Border Background="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <Grid Visibility="{Binding Path=EntityListVisibility}">
+
+                                    <ListView Name="EntityList" 
+                                              Background="Transparent" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                              VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                                              SelectionChanged="EntityList_SelectionChanged"
+                                              MinWidth="100" Foreground="Black"
+                                              FontFamily="Calibri" FontWeight="10"
+                                              ItemsSource="{Binding Entities}"
+                                              MouseDoubleClick="EntityList_MouseDoubleClick"
+                                              >
+                                </ListView>
+                                </Grid>
+                            </Border>
+                        </ScrollViewer>
+                        <sharp:ContentSpinner x:Name="DetailSpinner" 
+                                              Margin="10"
+                                              IsEnabled="True"
+                                              Visibility="{Binding DetailSpinnerVisible}"
+                                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              >
+                            <Image Source="/Images/WinAzSquare.png" Width="32" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </sharp:ContentSpinner>
+                    </Grid>
+                </Border>
+
+            </Grid>
+        </Grid>
+    </DockPanel>
+</UserControl>

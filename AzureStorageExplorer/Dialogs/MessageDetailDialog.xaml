@@ -1,0 +1,103 @@
+﻿<Window x:Class="Neudesic.AzureStorageExplorer.Dialogs.MessageDetailDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sharp="clr-namespace:SharpFellows.Toolkit.Controls"
+        xmlns:converters="clr-namespace:Neudesic.AzureStorageExplorer.Converters"
+        Title="{Binding Title}"
+        Width="480" Height="380"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
+        Icon="/Images/App.ico"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        >
+    
+    <Window.Resources>
+
+       <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Background" Value="#FFCDE7F4" />
+            <Setter Property="Foreground" Value="#FF07034B"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFA1CCE0" Offset="0"/>
+                        <GradientStop Color="#FFABD5EA" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <TabControl Name="TabControl">
+        
+            <!-- Properties -->
+
+            <TabItem Header="Properties" >
+                <ScrollViewer Name="PropertyPane" 
+                              Grid.Row="0"
+                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                              HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0">
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <StackPanel>
+                            <DataGrid Name="PropertyGrid"
+                                AutoGenerateColumns="False"
+                                Background="Transparent"
+                                RowBackground="White"
+                                Foreground="Black"
+                                FontFamily="Calibri" FontWeight="10" GridLinesVisibility="All"
+                                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                HorizontalGridLinesBrush="#22000000" VerticalGridLinesBrush="#22000000"
+                                HeadersVisibility="None" 
+                                ItemsSource="{Binding Properties,Mode=TwoWay}"
+                                >
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn IsReadOnly="True" Header="Property" Width="Auto" Binding="{Binding PropertyName,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" />
+                                    <DataGridTextColumn Header="Value" Width="Auto" Binding="{Binding PropertyValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Border>
+                </ScrollViewer>
+            </TabItem>
+               
+            <!-- Message Content Tab -->
+
+            <TabItem Header="Message">
+                <ScrollViewer x:Name="TextTabContent" Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                              HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0">
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid>
+                            <TextBlock Name="TextPreviewMessage" Text=""
+                                       FontFamily="Calibri" FontSize="12"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Button Name="CancelTextPreview" 
+                                    Content="Cancel"
+                                    Margin="0,48,0,0" 
+                                    Height="22"
+                                    FontFamily="Calibri" FontSize="12"
+                                    Template="{DynamicResource GlassButton}" Foreground="Black"                                     
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Visibility="Collapsed"
+                                     />
+
+                            <StackPanel>
+                                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                    <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  >
+                                        <TextBox Name="TextEdit" 
+                                                 Text="{Binding MessageText,Mode=OneWay}"
+                                                 AcceptsReturn="True" AcceptsTab="True" 
+                                                 TextWrapping="Wrap" 
+                                                 VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        </Grid>
+    </Window>

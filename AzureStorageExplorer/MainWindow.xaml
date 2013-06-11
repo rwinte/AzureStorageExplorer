@@ -1,0 +1,126 @@
+﻿<Window 
+  x:Class="Neudesic.AzureStorageExplorer.MainWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:vm="clr-namespace:Neudesic.AzureStorageExplorer.ViewModel"
+  xmlns:windows="clr-namespace:Neudesic.AzureStorageExplorer.Windows"
+  xmlns:controls="clr-namespace:Neudesic.AzureStorageExplorer.Controls"
+  FontSize="13" 
+  FontFamily="Verdana"
+  MinWidth="650" MinHeight="420"
+  Title="{Binding Path=DisplayName}"
+  Width="810" Height="580"
+  WindowStartupLocation="Manual"
+  Closing="Window_Closing"
+  >
+  <Window.Resources>
+    <ResourceDictionary Source="MainWindowResources.xaml" />
+  </Window.Resources>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="Help" CanExecute="HelpCanExecute" Executed="HelpExecuted"/>
+        <CommandBinding Command="windows:Commands.HelpAbout" CanExecute="HelpAboutCanExecute" Executed="HelpAboutExecuted"/>
+        <CommandBinding Command="windows:Commands.HelpWelcome" CanExecute="HelpWelcomeCanExecute" Executed="HelpWelcomeExecuted"/>
+        <CommandBinding Command="windows:Commands.HelpFeedback" CanExecute="HelpFeedbackCanExecute" Executed="HelpFeedbackExecuted"/>
+        <CommandBinding Command="windows:Commands.ViewErrors" CanExecute="ViewErrorsCanExecute" Executed="ViewErrorsExecuted"/>
+        <CommandBinding Command="windows:Commands.ToolsOptions" CanExecute="ToolsOptionsCanExecute" Executed="ToolsOptionsExecuted"/>
+        <CommandBinding Command="windows:Commands.ToolsCheckForNewVersion" CanExecute="ToolsCheckForNewVersionCanExecute" Executed="ToolsCheckForNewVersionExecuted"/>
+    </Window.CommandBindings>
+
+
+    <DockPanel>
+    <DockPanel DockPanel.Dock="Top" KeyboardNavigation.TabNavigation="None">
+            <Menu KeyboardNavigation.TabNavigation="Cycle">
+                <MenuItem Header="_File">
+                    <MenuItem Header="E_xit" Command="{Binding Path=CloseCommand}" />
+                </MenuItem>
+                
+                <MenuItem Header="_View">
+                    <MenuItem Header="_Errors" Command="windows:Commands.ViewErrors" />
+                </MenuItem>
+
+                <MenuItem Header="_Tools">
+                    <MenuItem Header="_Options" Command="windows:Commands.ToolsOptions" />
+                    <MenuItem Header="_Check for Newer Version" Command="windows:Commands.ToolsCheckForNewVersion" />
+                </MenuItem>
+                
+                <MenuItem Header="_Help" >
+                    <MenuItem Header="User Guide" Command="Help" />
+                    <MenuItem Header="Welcome Screen" Command="windows:Commands.HelpWelcome" />
+                    <MenuItem Header="Give Feedback" Command="windows:Commands.HelpFeedback" />
+                    <MenuItem Header="About" Command="windows:Commands.HelpAbout" />
+                </MenuItem>
+            </Menu>
+    </DockPanel>
+
+    <DockPanel DockPanel.Dock="Top" KeyboardNavigation.TabNavigation="None">
+        <Border Grid.Column="0" 
+                Style="{StaticResource MainBorderStyle}"
+                Margin="4"
+                HorizontalAlignment="Stretch" 
+                >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" >
+                        <ComboBox Name="StorageAccountsComboBox" 
+                              ItemsSource="{Binding Path=Accounts}"
+                              SelectionChanged="StorageAccountsComboBox_SelectionChanged"
+                              HorizontalAlignment="Left"
+                              MinWidth="300"
+                              Margin="0,0,8,0"
+                              FontFamily="Calibri" FontSize="14"
+                              />
+                        <Button Name="AddStorageAccount" 
+                                Content="Add Account" 
+                                Template="{DynamicResource GlassButton}" Foreground="Black"
+                                FontFamily="Calibri" FontSize="12"
+                                Command="{Binding Path=Commands[0]}"
+                                Margin="0,0,4,0" 
+                                Click="AddStorageAccount_Click"
+                                />
+                        <Button Name="EditStorageAccount" 
+                                Content="Edit" 
+                                Template="{DynamicResource GlassButton}" Foreground="Black"
+                                FontFamily="Calibri" FontSize="12"
+                                Command="{Binding Path=Commands[0]}"
+                                Margin="0,0,4,0" 
+                                Click="EditStorageAccount_Click"
+                                />
+                        <Button Name="RemoveStorageAccount"
+                                FontFamily="Calibri" FontSize="12"
+                                Template="{DynamicResource GlassButton}" Foreground="Black"
+                                Content="Remove"
+                                Command="{Binding Path=Commands[0]}"
+                                Padding="8,0,8,0"
+                                Click="RemoveStorageAccount_Click"
+                                />
+                    </StackPanel>
+                    <Image  Grid.Column="2"
+                            Source="/Images/neudesic_rounded.png"
+                            Height="20"
+                            HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Margin="2,2,2,2"
+                            />
+                </Grid>
+            </Border>
+        </DockPanel>
+
+        <Grid Margin="4,0,4,0">
+
+      <Border
+        Style="{StaticResource MainBorderStyle}"
+        >
+        <HeaderedContentControl 
+            Content="{Binding Path=Workspaces}"
+            ContentTemplate="{StaticResource WorkspacesTemplate}"
+            Header="Workspaces"
+            Style="{StaticResource MainHCCStyle}"
+            />
+      </Border>
+    </Grid>
+  </DockPanel>
+</Window>

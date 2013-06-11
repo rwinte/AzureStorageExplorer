@@ -1,0 +1,454 @@
+﻿<Window x:Class="Neudesic.AzureStorageExplorer.Dialogs.BlobSecurityDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Blob &amp; Container Security"
+        Width="600"
+        Height="340"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Icon="/Images/App.ico"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False">
+    <Window.Resources>
+        <Style x:Key="DataGridColumnHeaderStyle"
+               TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Background"
+                    Value="#FFCDE7F4" />
+            <Setter Property="Foreground"
+                    Value="#FF07034B" />
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1"
+                                         StartPoint="0.5,0">
+                        <GradientStop Color="#FFA1CCE0"
+                                      Offset="0" />
+                        <GradientStop Color="#FFABD5EA"
+                                      Offset="1.0" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+    <Grid Margin="4"
+          VerticalAlignment="Stretch"
+          HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+
+            <!-- Container Access -->
+
+            <TabItem Header="Container Access">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Text="Container access level:" />
+
+                    <StackPanel Grid.Row="0"
+                                Grid.Column="2"
+                                Orientation="Horizontal">
+                        <RadioButton x:Name="AccessPrivate"
+                                     GroupName="Access"
+                                     Content="Private"
+                                     Margin="0,0,8,0" />
+                        <RadioButton x:Name="AccessPublicBlob"
+                                     GroupName="Access"
+                                     Content="Public Blob"
+                                     Margin="0,0,8,0" />
+                        <RadioButton x:Name="AccessPublicContainer"
+                                     GroupName="Access"
+                                     Content="Public Container"
+                                     Margin="0,0,8,0" />
+                    </StackPanel>
+
+                    <Button x:Name="SaveAccessLevel"
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Content="Update Access Level"
+                            IsDefault="True"
+                            Margin="0,0,4,0"
+                            Height="22"
+                            FontFamily="Calibri"
+                            FontSize="12"
+                            Template="{DynamicResource GlassButton}"
+                            Foreground="Black"
+                            HorizontalAlignment="Left"
+                            Click="SetAccessLevel_Click" />
+                </Grid>
+            </TabItem>
+
+            <!-- Shared Access Signatures -->
+
+            <TabItem Header="Shared Access Signatures">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Text="Container name:" />
+
+                    <StackPanel Grid.Row="0"
+                                Grid.Column="2"
+                                Orientation="Horizontal">
+                        <TextBox x:Name="ContainerNameTextBox"
+                                 Margin="0,0,0,0"
+                                 IsReadOnly="True"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Width="240" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               Text="Blob name:" />
+
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="2">
+                        <TextBox x:Name="BlobNameTextBox"
+                                 Margin="0,0,0,0"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Width="240" />
+                        <TextBlock Margin="0,0,0,0"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Text="(for a container signature, do not specify a blob name)" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="4"
+                               Grid.Column="0"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               Text="Policy:" />
+
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="2">
+                        <ComboBox x:Name="PolicyComboBox"
+                                  Margin="0,0,0,0"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Center"
+                                  Width="240"
+                                  SelectionChanged="PolicyComboBox_SelectionChanged" />
+                        <TextBlock Margin="0,0,0,0"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Text="(for an ad-hoc signature, do not select a policy)" />
+                    </StackPanel>
+
+                    <TextBlock x:Name="PermissionsLabel"
+                               Grid.Row="6"
+                               Grid.Column="0"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               Text="Permissions:" />
+
+                    <StackPanel x:Name="PermissionsControls"
+                                Grid.Row="6"
+                                Grid.Column="2"
+                                Orientation="Horizontal">
+                        <CheckBox x:Name="AllowRead"
+                                  Margin="0,0,8,0"
+                                  Content="Read"
+                                  IsChecked="True"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Center" />
+                        <CheckBox x:Name="AllowWrite"
+                                  Margin="0,0,8,0"
+                                  Content="Write"
+                                  IsChecked="False"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Center" />
+                        <CheckBox x:Name="AllowDelete"
+                                  Margin="0,0,8,0"
+                                  Content="Delete"
+                                  IsChecked="False"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Center" />
+                        <CheckBox x:Name="AllowList"
+                                  Margin="0,0,8,0"
+                                  Content="List"
+                                  IsChecked="False"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <TextBlock x:Name="TimeLabel"
+                               Grid.Row="8"
+                               Grid.Column="0"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               Text="Start / Expiry Time (UTC):" />
+
+                    <StackPanel x:Name="TimeControls"
+                                Grid.Row="8"
+                                Grid.Column="2"
+                                Orientation="Horizontal">
+                        <TextBox x:Name="StartTimeTextBox"
+                                 Margin="0,0,8,0"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Width="140"
+                                 Text="" />
+                        <TextBox x:Name="ExpiryTimeTextBox"
+                                 Margin="0,0,0,0"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Width="140"
+                                 Text="" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="10"
+                                Grid.Column="2"
+                                Orientation="Horizontal">
+
+                        <Button Content="Generate Signature"
+                                IsDefault="True"
+                                Margin="0,0,4,0"
+                                Height="22"
+                                FontFamily="Calibri"
+                                FontSize="12"
+                                Template="{DynamicResource GlassButton}"
+                                Foreground="Black"
+                                HorizontalAlignment="Left"
+                                Click="GenerateSignature_Click" />
+
+                        <Button x:Name="CopyToClipboard"
+                                Content="Copy to Clipboard"
+                                IsDefault="True"
+                                Visibility="Collapsed"
+                                Margin="0,0,4,0"
+                                Height="22"
+                                FontFamily="Calibri"
+                                FontSize="12"
+                                Template="{DynamicResource GlassButton}"
+                                Foreground="Black"
+                                HorizontalAlignment="Left"
+                                Click="CopyToClipboard_Click" />
+
+                        <Button x:Name="TestInBrowser"
+                                Content="Test"
+                                IsDefault="True"
+                                Visibility="Collapsed"
+                                Margin="0,0,4,0"
+                                Height="22"
+                                FontFamily="Calibri"
+                                FontSize="12"
+                                Template="{DynamicResource GlassButton}"
+                                Foreground="Black"
+                                HorizontalAlignment="Left"
+                                Click="Test_Click" />
+                    </StackPanel>
+
+                    <TextBlock x:Name="SignatureTextBlock"
+                               Grid.Row="12"
+                               Grid.Column="0"
+                               Visibility="Collapsed"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               Text="Signature:" />
+
+                    <TextBox x:Name="SignatureTextBox"
+                             Grid.Row="12"
+                             Grid.Column="2"
+                             Visibility="Collapsed"
+                             Margin="0,0,0,0"
+                             HorizontalAlignment="Left"
+                             HorizontalScrollBarVisibility="Auto"
+                             VerticalAlignment="Center"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             Width="340"
+                             TextWrapping="NoWrap"
+                             Text="" />
+
+                </Grid>
+            </TabItem>
+
+            <!-- Shared Access Policies -->
+
+            <TabItem Header="Shared Access Policies">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Row="0"
+                                Grid.Column="0"
+                                Orientation="Horizontal">
+
+                        <Button x:Name="NewPolicy"
+                                Template="{DynamicResource GlassButton}"
+                                Height="22"
+                                FontFamily="Calibri"
+                                FontSize="12"
+                                Margin="0,0,4,0"
+                                Content="New"
+                                HorizontalAlignment="Left"
+                                Click="NewPolicy_Click" />
+
+                        <Button x:Name="DeletePolicy"
+                                Template="{DynamicResource GlassButton}"
+                                Height="22"
+                                FontFamily="Calibri"
+                                FontSize="12"
+                                Margin="0,0,4,0"
+                                Content="Delete"
+                                HorizontalAlignment="Left"
+                                Click="DeletePolicy_Click" />
+
+                        <Button x:Name="DeleteAllPolicies"
+                                Template="{DynamicResource GlassButton}"
+                                Height="22"
+                                FontFamily="Calibri"
+                                FontSize="12"
+                                Margin="0,0,4,0"
+                                Content="Clear"
+                                HorizontalAlignment="Left"
+                                Click="DeleteAllPolicies_Click" />
+
+                        <Button x:Name="SavePolicies"
+                            Template="{DynamicResource GlassButton}"
+                            Height="22"
+                            FontFamily="Calibri"
+                            FontSize="12"
+                            Margin="0,0,4,0"
+                            Content="Save Policies"
+                            HorizontalAlignment="Left"
+                            Click="SavePolicies_Click" />
+
+
+                    </StackPanel>
+
+                    <DataGrid Name="PoliciesGrid"
+                              Grid.Row="4"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3"
+                              AutoGenerateColumns="False"
+                              Background="Transparent"
+                              RowBackground="White"
+                              Foreground="Black"
+                              FontFamily="Calibri"
+                              FontWeight="10"
+                              GridLinesVisibility="All"
+                              ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                              HorizontalGridLinesBrush="#22000000"
+                              VerticalGridLinesBrush="#22000000"
+                              HeadersVisibility="All"
+                              CanUserAddRows="True"
+                              CanUserDeleteRows="True"
+                              CanUserResizeColumns="True"
+                              ItemsSource="{Binding ContentTypes,Mode=TwoWay}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Policy Name"
+                                                Width="120"
+                                                Binding="{Binding PolicyName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridCheckBoxColumn Header="Read"
+                                                    Width="40"
+                                                    Binding="{Binding AllowRead,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridCheckBoxColumn Header="Write"
+                                                    Width="40"
+                                                    Binding="{Binding AllowWrite,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridCheckBoxColumn Header="Delete"
+                                                    Width="40"
+                                                    Binding="{Binding AllowDelete,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridCheckBoxColumn Header="List"
+                                                    Width="40"
+                                                    Binding="{Binding AllowList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn Header="Start Time"
+                                                Width="130"
+                                                Binding="{Binding StartTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn Header="Expiry Time"
+                                                Width="130"
+                                                Binding="{Binding ExpiryTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+        <StackPanel Grid.Row="1"
+                    Margin="0,8,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Left">
+            <!--<Button Content="Save Changes" IsDefault="True"
+                    Margin="0,0,4,0"
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"                     
+                    Click="Save_Click" />-->
+            <Button Content="Close"
+                    IsCancel="True"
+                    Margin="0,0,8,0"
+                    Height="22"
+                    FontFamily="Calibri"
+                    FontSize="12"
+                    Template="{DynamicResource GlassButton}"
+                    Foreground="Black"
+                    Click="Cancel_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

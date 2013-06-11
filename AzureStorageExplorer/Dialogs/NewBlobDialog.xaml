@@ -1,0 +1,99 @@
+﻿<Window x:Class="Neudesic.AzureStorageExplorer.Dialogs.NewBlobDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="New Blob"
+        Width="280" Height="258"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
+        Icon="/Images/App.ico"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        >
+    <Grid Margin="4" VerticalAlignment="Top" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="3" 
+                    Margin="0,0,0,8"
+                    Orientation="Horizontal" >
+            <TextBlock Margin="0,0,8,0"
+                       Text="Blob Type:" />
+            <RadioButton Name="BlockBlob" 
+                         GroupName="BlobType"
+                         Content="Block Blob"
+                         Margin="0,0,8,0"
+                         IsChecked="True"
+                         Checked="BlockBlob_Checked"
+                         x:FieldModifier="public"
+                         />
+            <RadioButton Name="PageBlob" 
+                         GroupName="BlobType"
+                         Content="Page Blob"
+                         Margin="0,0,8,0"
+                         Checked="PageBlob_Checked"
+                         x:FieldModifier="public"
+                         />
+        </StackPanel>
+
+
+        <TextBlock Grid.Row="0" 
+                   Margin="0,0,0,0"
+                   Text="Blob name:" />
+        <TextBox Grid.Row="1" 
+                 Name="BlobName"
+                 Margin="0,0,0,8"
+                 HorizontalAlignment="Left"
+                 Width="250"
+                 x:FieldModifier="public"
+                 />
+
+        <TextBlock Name="TextContentLabel" Grid.Row="4" 
+                   Margin="0,0,0,0"
+                   Text="Initial text content:" />
+        <TextBox Grid.Row="5" 
+                 Name="TextContent"
+                 Margin="0,0,0,8"
+                 HorizontalAlignment="Left"
+                 Width="250" Height="90"
+                 AcceptsReturn="True" AcceptsTab="True"
+                 x:FieldModifier="public"
+                 />
+
+        <TextBlock Name="PageBlobSizeLabel" Grid.Row="4" 
+                   Margin="0,0,0,0"
+                   Text="Page Blob Size (n [K][M][G][T]):"
+                   Visibility="Collapsed" />
+        <TextBox Grid.Row="5" 
+                 Name="PageBlobSize"
+                 Margin="0,0,0,8"
+                 HorizontalAlignment="Left"
+                 Width="80"
+                 VerticalAlignment="Top"
+                 x:FieldModifier="public"
+                 Visibility="Collapsed" 
+                 />
+
+        <StackPanel Grid.Row="7" Orientation="Horizontal" >
+            <Button Content="Create Blob" IsDefault="True"
+                    Margin="0,0,4,0"
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"                     
+                    Click="CreateBlob_Click" />
+            <Button Content="Cancel" IsCancel="True" 
+                    Margin="0,0,8,0"
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"                     
+                    Click="Cancel_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,82 @@
+﻿<Window x:Class="Neudesic.AzureStorageExplorer.Dialogs.WelcomeDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Welcome!"
+        Width="400" Height="350"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
+        Icon="/Images/App.ico"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        >
+    <Grid Margin="4" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBox Grid.Row="0" 
+                 Margin="0,0,0,0"
+                 BorderThickness="0"
+                 TextWrapping="Wrap"
+                 FontWeight="Bold"
+                 IsReadOnly="True"
+                 Text="Welcome to Azure Storage Explorer 4" />
+        
+        <TextBox Grid.Row="1" 
+                 Margin="0,0,0,16"
+                 BorderThickness="0"
+                 TextWrapping="Wrap"
+                 IsReadOnly="True"
+                 Text="A community donation by Neudesic" />
+
+        <TextBox Grid.Row="2" 
+                 Margin="0,0,0,16"
+                 BorderThickness="0"
+                 IsReadOnly="True"
+                 TextWrapping="Wrap"
+                 Text="The safety of your data is of paramount importance to us. Please exercise caution and keep backup copies of your data. We'd hate for an error--human or programmatic--to ever cause data loss." />
+
+        <TextBox Grid.Row="3" 
+                 Margin="0,0,0,16"
+                 BorderThickness="0"
+                 IsReadOnly="True"
+                 TextWrapping="Wrap"
+                 Text="This is community software, which means the software has not yet undergone extensive testing. So please exercise appropriate caution and keep safe copies of your data. You can submit feedback at AzureStorageExplorer.CodePlex.com." />
+
+        <TextBox Grid.Row="4" 
+                 Margin="0,0,0,16"
+                 BorderThickness="0"
+                 IsReadOnly="True"
+                 TextWrapping="Wrap"
+                 Text="If you're curious about the implementation, the source code to Azure Storage Explorer is available on the CodePlex project site." />
+
+        <CheckBox Name="ShowWelcome" 
+                  Grid.Row="5"
+                  Margin="0,0,0,16"
+                  IsChecked="{Binding Path=ShowWelcomeOnStartup,Mode=TwoWay}"
+                  Content="Show welcome on startup"
+                  />
+        
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Left" >
+            <Button Content="Continue" IsDefault="True" IsCancel="True"
+                    Margin="0,0,8,0"
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"                     
+                    Click="Continue_Click" />
+            <Button Content="Give Feedback" 
+                    Margin="0,0,4,0"
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"                     
+                    Click="Feedback_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

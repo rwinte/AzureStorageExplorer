@@ -1,0 +1,187 @@
+﻿<Window x:Class="Neudesic.AzureStorageExplorer.Dialogs.OptionsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Options"
+        Width="540" Height="350"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
+        Icon="/Images/App.ico"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        >
+    <Window.Resources>
+        <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Background" Value="#FFCDE7F4" />
+            <Setter Property="Foreground" Value="#FF07034B"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFA1CCE0" Offset="0"/>
+                        <GradientStop Color="#FFABD5EA" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+    <Grid Margin="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    >
+            
+            <!-- General -->
+            
+            <TabItem Header="General">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                    </Grid.RowDefinitions>
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Grid.Column="0"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Text="Culture:" />
+
+                    <StackPanel Grid.Row="0" Grid.Column="2"
+                                Orientation="Horizontal" >
+                        <TextBox Margin="0,0,0,0"
+                                 Text="{Binding Culture,Mode=TwoWay}"
+                                 HorizontalAlignment="Left" VerticalAlignment="Center"
+                                 Width="60"
+                                />
+                        <TextBlock Margin="8,0,0,0"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                                   Text="ex: en-US (leave blank to use OS culture)" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Text="Show welcome screen on start-up:" />
+
+                    <CheckBox Grid.Row="2" Grid.Column="2"
+                              Margin="0,0,0,0"
+                              IsChecked="{Binding ShowWelcomeOnStartup,Mode=TwoWay}"
+                              HorizontalAlignment="Left" VerticalAlignment="Center"
+                              />
+
+                    <TextBlock Grid.Row="4" Grid.Column="0"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Text="Check for newer version on start-up:" />
+
+                    <CheckBox Grid.Row="4" Grid.Column="2"
+                              Margin="0,0,0,0"
+                              IsChecked="{Binding CheckForNewerVersion,Mode=TwoWay}"
+                              HorizontalAlignment="Left" VerticalAlignment="Center"
+                              />
+
+                    <TextBlock Grid.Row="6" Grid.Column="0"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Text="Preserve window size and position:" />
+
+                    <CheckBox Grid.Row="6" Grid.Column="2"
+                              IsChecked="{Binding PreserveWindowPosition,Mode=TwoWay}"
+                              HorizontalAlignment="Left" VerticalAlignment="Center"
+                              />
+
+                </Grid>
+            </TabItem>
+
+            <!-- Content Types -->
+
+            <TabItem Header="Content Types">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0"
+                               Margin="8,0,0,0"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Text="Set Content Type Automatically on Upload:" />
+
+                    <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" >
+                        <CheckBox Margin="0,0,0,0"
+                                  IsChecked="{Binding SetContentTypeAutomtically,Mode=TwoWay}"
+                                  HorizontalAlignment="Left" VerticalAlignment="Center"
+                              />
+                        <Button Template="{DynamicResource GlassButton}"
+                                Height="22"
+                                FontFamily="Calibri" FontSize="12"
+                                Margin="16,0,0,0"
+                                Content="Reset to Defaults"
+                                Click="DefaultContentTypes_Click"/>
+                    </StackPanel>
+
+                    <DataGrid Name="ContentTypesGrid"
+                              Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
+                              AutoGenerateColumns="False"
+                              Background="Transparent"
+                              RowBackground="White"
+                              Foreground="Black"
+                              FontFamily="Calibri" FontWeight="10" GridLinesVisibility="All"
+                              ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                              HorizontalGridLinesBrush="#22000000" VerticalGridLinesBrush="#22000000"
+                              HeadersVisibility="All"
+                              CanUserAddRows="True" CanUserDeleteRows="True" CanUserResizeColumns="True"
+                              ItemsSource="{Binding ContentTypes,Mode=TwoWay}"
+                              >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="File Type" Width="Auto" Binding="{Binding FileType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn Header="Content Type" Width="*" Binding="{Binding ContentType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+        
+        <StackPanel Grid.Row="1" 
+                    Margin="0,8,0,0"
+                    Orientation="Horizontal" HorizontalAlignment="Left" >
+            <Button Content="Save Changes" IsDefault="True"
+                    Margin="0,0,4,0"
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"                     
+                    Click="Save_Click" />
+            <Button Content="Cancel" IsCancel="True"
+                    Margin="0,0,8,0"
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"                     
+                    Click="Cancel_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

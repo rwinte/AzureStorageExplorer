@@ -1,0 +1,108 @@
+﻿<Window x:Class="Neudesic.AzureStorageExplorer.Dialogs.AddAccountDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add Storage Account"
+        Width="400" Height="186"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
+        Icon="/Images/App.ico"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        >
+    <Grid Margin="4" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Name="AccountNameLabel" 
+                   Grid.Row="0" Grid.Column="0"
+                   Margin="0,0,0,0"
+                   Text="Storage account name:" />
+        <Grid Grid.Row="1" Grid.Column="0" 
+              Background="White"
+              Margin="0,0,0,8"
+              HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock Name="AccountNameGhost"
+                       Text="MyStorageAccount"
+                       HorizontalAlignment="Left" VerticalAlignment="Center"
+                       Foreground="LightGray"
+                       FontFamily="Calibri" FontSize="12"
+                       Padding="6,0,0,0"
+                       />
+            <TextBox Name="AccountName"
+                     HorizontalAlignment="Left" VerticalAlignment="Center"
+                     Background="Transparent" 
+                     TextChanged="AccountName_TextChanged"
+                     Width="230"
+                     x:FieldModifier="public"
+                     />
+        </Grid>
+
+        <CheckBox Grid.Row="1" Grid.Column="1"
+                  Margin="16,0,0,0"
+                  Name="DevStorage" 
+                  Content="Developer Storage"
+                  HorizontalAlignment="Right" VerticalAlignment="Top"
+                  Checked="DevStorage_Checked"
+                  Unchecked="DevStorage_Unchecked"
+                  />
+
+        <TextBlock Name="AccountKeyLabel" 
+                   Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                   Margin="0,0,0,0"
+                   Text="Storage account key:" />
+
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
+              Background="White"
+              Margin="0,0,0,8"
+              HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock Name="AccountKeyGhost"
+                       Text="XXXXXXXXXX-STORAGE-ACCOUNT-KEY-XXXXXXXXXX"
+                       HorizontalAlignment="Left" VerticalAlignment="Center"
+                       Foreground="LightGray"
+                       FontFamily="Calibri" FontSize="12"
+                       Padding="6,0,0,0"
+                       />
+            <TextBox Name="AccountKey"
+                     HorizontalAlignment="Left" VerticalAlignment="Center"
+                     Background="Transparent" 
+                     Width="360"
+                     TextChanged="AccountKey_TextChanged"
+                     x:FieldModifier="public"
+                     />
+        </Grid>
+
+        <CheckBox Grid.Row="4" Grid.Column="0"
+                  Margin="0,0,0,8"
+                  Name="UseHttps" 
+                  Content="Use HTTPS"
+                  HorizontalAlignment="Left" VerticalAlignment="Top"
+                  x:FieldModifier="public"
+                  />
+
+        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" >
+            <Button Name="Save" 
+                    Content="Add Storage Account" IsDefault="True"
+                    Margin="0,0,4,0"
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"
+                    Click="AddAccount_Click" />
+            <Button Content="Cancel" IsCancel="True"
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"
+                    Margin="0,0,8,0"
+                    Click="Cancel_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

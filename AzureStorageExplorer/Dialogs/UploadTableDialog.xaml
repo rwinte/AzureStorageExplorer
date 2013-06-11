@@ -1,0 +1,129 @@
+﻿<Window x:Class="Neudesic.AzureStorageExplorer.Dialogs.UploadTableDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Upload Table Entities"
+        Width="420" Height="280"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
+        Icon="/Images/App.ico"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        >
+    <Grid Margin="4" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" 
+                   Margin="0,0,0,16"
+                   Text="Entities in the specified file will be uploaded to the selected table."
+                   />
+        
+        <StackPanel Grid.Row="1" Orientation="Horizontal" >
+            <TextBlock  
+                   Margin="0,0,0,0"
+                   Text="Source File name:" />
+        </StackPanel>
+
+        <TextBlock Grid.Row="3" 
+                   Margin="0,0,0,0"
+                   Text="Destination Table name:" />
+        <TextBox Grid.Row="4" 
+                 Name="TableName"
+                 Margin="0,0,0,8"
+                 HorizontalAlignment="Left"
+                 Width="390"
+                 x:FieldModifier="public"
+                 />
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,8">
+            <TextBox Name="FileName"
+                 Margin="0,0,8,0"
+                 HorizontalAlignment="Left"
+                 Width="352"
+                 x:FieldModifier="public"
+                 />
+            <Button Name="Browse" Content="..."
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"  
+                    VerticalAlignment="Center"
+                    Click="Browse_Click"
+                    />
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="5" 
+                    Margin="0,0,0,8"
+                    Orientation="Horizontal" >
+            <TextBlock Margin="0,0,8,0"
+                       Width="50"
+                       Text="Format:" />
+            <StackPanel>
+            <RadioButton Name="FormatCSV" 
+                         GroupName="Accessibility"
+                         Content="CSV File (editable in Excel)"
+                         Margin="0,0,8,0"
+                         IsChecked="True"
+                         Checked="FormatCSV_Checked"
+                         x:FieldModifier="public"
+                         />
+            <RadioButton Name="FormatPlainXML" 
+                         GroupName="Accessibility"
+                         Content="Plain XML"
+                         Checked="FormatPlainXML_Checked"
+                         Margin="0,0,8,0"
+                         x:FieldModifier="public"
+                         />
+                <RadioButton Name="FormatAtomPub" 
+                         GroupName="Accessibility"
+                         Content="AtomPub Feed XML"
+                         Checked="FormatAtomPub_Checked"
+                         Margin="0,0,8,0"
+                         x:FieldModifier="public"
+                         />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="6" 
+                    Margin="0,0,0,16"
+                    Orientation="Horizontal" >
+            <TextBlock Margin="0,0,8,0"
+                       Width="50"
+                       Text="Options:" />
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                <CheckBox Name="OptionColumnDefinitions" 
+                          Content="File data contains a column header row"
+                          Margin="0,0,16,0"
+                          IsChecked="True"
+                          x:FieldModifier="public"
+                          />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="7" Orientation="Horizontal" >
+            <Button Content="Upload" IsDefault="True"
+                    Margin="0,0,4,0"
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"                     
+                    Click="UploadTable_Click" />
+            <Button Content="Cancel" IsCancel="True" 
+                    Margin="0,0,4,0"
+                    Height="22"
+                    FontFamily="Calibri" FontSize="12"
+                    Template="{DynamicResource GlassButton}" Foreground="Black"                     
+                    Click="Cancel_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
